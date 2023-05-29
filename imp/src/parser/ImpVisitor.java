@@ -1,4 +1,4 @@
-// Generated from /home/stini/univr/3anno/linguaggi/lab/imp/src/Imp.g4 by ANTLR 4.12.0
+// Generated from /home/stini/univr/3anno/linguaggi/lab/lab_programming_languages/imp/src/Imp.g4 by ANTLR 4.12.0
 package parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -35,12 +35,26 @@ public interface ImpVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncBody(ImpParser.FuncBodyContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code globalDeclare}
+	 * labeled alternative in {@link ImpParser#com}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobalDeclare(ImpParser.GlobalDeclareContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code globalAssign}
 	 * labeled alternative in {@link ImpParser#com}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitGlobalAssign(ImpParser.GlobalAssignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expCmd}
+	 * labeled alternative in {@link ImpParser#com}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpCmd(ImpParser.ExpCmdContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nd}
 	 * labeled alternative in {@link ImpParser#com}.

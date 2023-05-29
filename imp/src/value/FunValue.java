@@ -15,8 +15,6 @@ public class FunValue extends Value {
 
     private final ImpParser.ExpContext returnExp;
 
-    private final Map<String, ExpValue<?>> variables = new HashMap<>();
-
     public FunValue(String name, List<String> params, ImpParser.ComContext body, ImpParser.ExpContext returnExp) {
         this.name = name;
         this.params = params;
@@ -48,10 +46,6 @@ public class FunValue extends Value {
 
     public ImpParser.ExpContext getReturnExp() {
         return returnExp;
-    }
-
-    public Map<String, ExpValue<?>> getVariables() {
-        return variables;
     }
 
     public int totParams() {

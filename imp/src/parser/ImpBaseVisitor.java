@@ -1,4 +1,4 @@
-// Generated from /home/stini/univr/3anno/linguaggi/lab/imp/src/Imp.g4 by ANTLR 4.12.0
+// Generated from /home/stini/univr/3anno/linguaggi/lab/lab_programming_languages/imp/src/Imp.g4 by ANTLR 4.12.0
 package parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -46,7 +46,21 @@ public class ImpBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitGlobalDeclare(ImpParser.GlobalDeclareContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitGlobalAssign(ImpParser.GlobalAssignContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitExpCmd(ImpParser.ExpCmdContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

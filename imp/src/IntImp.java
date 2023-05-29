@@ -2,21 +2,29 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import value.*;
 import parser.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public class IntImp extends ImpBaseVisitor<Value> {
 
-    private final Conf conf;
+    private final LinkedList<Conf> vars;                             //variables
+    private final Conf globalVars;
+    private final Set<FunValue> functions = new HashSet<>();         //functions
 
     public IntImp(Conf conf) {
-        this.conf = conf;
+        vars = new LinkedList<>();
+        vars.add(new Conf());
+
+        globalVars = new Conf();
     }
 
     private ComValue visitCom(ImpParser.ComContext ctx) {
         return (ComValue) visit(ctx);
+    }
+
+    @Override
+    public ComValue visitExpCmd(ImpParser.ExpCmdContext ctx) {
+        visitExp(ctx.exp());
+        return ComValue.INSTANCE;
     }
 
     private ExpValue<?> visitExp(ImpParser.ExpContext ctx) {
@@ -75,7 +83,7 @@ public class IntImp extends ImpBaseVisitor<Value> {
         String id = ctx.ID().getText();
         ExpValue<?> v = visitExp(ctx.exp());
 
-        conf.update(id, v);
+        vars.getLast().update(id, v);
 
         return ComValue.INSTANCE;
     }
@@ -176,14 +184,14 @@ public class IntImp extends ImpBaseVisitor<Value> {
     public ExpValue<?> visitId(ImpParser.IdContext ctx) {
         String id = ctx.ID().getText();
 
-        if (!conf.contains(id)) {
+        if (!vars.getLast().contains(id)) {
             System.err.println("Variable " + id + " used but never instantiated");
             System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
 
             System.exit(1);
         }
 
-        return conf.get(id);
+        return vars.getLast().get(id);
     }
 
     @Override
@@ -223,62 +231,101 @@ public class IntImp extends ImpBaseVisitor<Value> {
         }
 
         // Aggiungo la funzione
-        conf.addFunction(new FunValue(
-                functionName,
-                parameters,
-                ctx.funcBody().com(),
-                ctx.funcBody().exp()
-        ));
+        functions.add(
+                new FunValue(
+                        functionName,
+                        parameters,
+                        ctx.funcBody().com(),
+                        ctx.funcBody().exp()
+                )
+        );
 
         return ComValue.INSTANCE;
     }
 
     @Override
-    public Value visitFuncCall(ImpParser.FuncCallContext ctx) {
+    public ExpValue<?> visitFuncCall(ImpParser.FuncCallContext ctx) {
         String functionName = ctx.ID().getText();
-        FunValue funValue = conf.getFunction(functionName);
+        List<ImpParser.ExpContext> params = ctx.exp();
 
-        // Verifico l'esistenza della funzione
-        if (funValue == null) {
-            System.err.println("Function " + functionName + " not found");
-            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
-            System.exit(1);
+        for(FunValue fun : functions){
+            if(fun.getName().equals(functionName)){
+                if(fun.totParams() != params.size()) {
+                    System.err.println("Wrong number of arguments");
+                    System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+                    System.exit(1);
+                }
+
+                Conf funcConf = new Conf();                 // Function variables
+                int paramIndex = 0;
+                for (String id : fun.getParams()) {         // Visit all parameters
+                    funcConf.update(id, visitExp(params.get(paramIndex)));      // Add param value to function Conf
+                    paramIndex++;
+                }
+
+                vars.add(funcConf);
+                ImpParser.ComContext body = fun.getBody();
+                if(body != null)
+                    visitCom(fun.getBody());
+
+                ExpValue<?> returnValue = visitExp(fun.getReturnExp());
+                vars.removeLast();
+
+                return returnValue;
+            }
         }
 
-        // Verifico il numero di argomenti
-        List<ImpParser.ExpContext> arguments = ctx.exp();
-        if(arguments.size() != funValue.totParams()) {
-            System.err.println("Wrong number of arguments");
-            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
-            System.exit(1);
-        }
+        System.err.println("Function " + functionName + " not found");
+        System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+        System.exit(1);
 
-        // Associo nome/valore di ogni parametro passato alla funzione
-        List<String> params = funValue.getParams();
-        HashMap<String, ExpValue<?>> paramsValues = new HashMap<>();
-        for (int i = 0; i < arguments.size(); i++) {
-            ExpValue<?> result = visitExp(arguments.get(i));
-            paramsValues.put(params.get(i), result);
-        }
-
-        // Aggiorno il contesto
-        Map<String, ExpValue<?>> previousVariables =  conf.getVariables();
-        conf.changeContext(funValue.getVariables());
-
-        // Aggiungo i parametri alle variabili della funzione
-        for(String param : paramsValues.keySet()){
-            conf.update(param, paramsValues.get(param));
-        }
-
-        // Esecuzione del body
-        visitCom(funValue.getBody());
-
-        // Valutazione dell'espressione di return
-        ExpValue<?> result = visitExp(funValue.getReturnExp());
-
-        // Ripristino il contesto
-        conf.changeContext(previousVariables);
-        return result;
+        return null;
     }
 
+    @Override
+    public Value visitGlobalDeclare(ImpParser.GlobalDeclareContext ctx) {
+        String id = ctx.ID().getText();
+        ExpValue<?> v = visitExp(ctx.exp());
+
+        globalVars.update(id, v);
+
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public ComValue visitGlobalAssign(ImpParser.GlobalAssignContext ctx) {
+        String id = ctx.ID().getText();
+        ExpValue<?> v = visitExp(ctx.exp());
+
+        if(!globalVars.contains(id)) {
+            System.err.println("Global variable " + id + " used but never declared");
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+            System.exit(1);
+        }
+        globalVars.update(id, v);
+
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public Value visitGlobalId(ImpParser.GlobalIdContext ctx) {
+        String id = ctx.ID().getText();
+
+        if (!globalVars.contains(id)) {
+            System.err.println("Global variable " + id + " used but never instantiated");
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+            System.exit(1);
+        }
+        return globalVars.get(id);
+    }
+
+    @Override
+    public ComValue visitNd(ImpParser.NdContext ctx) {
+        // Generate random boolean value
+        boolean b = Math.random() > 0.5;
+        if(b)
+            return visitCom(ctx.com(0));
+        else
+            return visitCom(ctx.com(1));
+    }
 }

@@ -10,12 +10,14 @@ funcBody : LBRACE (com SEMICOLON)? RETURN exp RBRACE;
 
 com : IF LPAR exp RPAR THEN LBRACE com RBRACE ELSE LBRACE com RBRACE    # if
     | ID ASSIGN exp                                                     # assign
-    | GLOBAL ID ASSIGN exp                                              # globalAssign
+    | GLOBAL ID ASSIGN exp                                              # globalDeclare
+    | ID DOTG ASSIGN exp                                                # globalAssign
     | SKIPP                                                             # skip
     | com SEMICOLON com                                                 # seq
     | WHILE LPAR exp RPAR LBRACE com RBRACE                             # while
     | OUT LPAR exp RPAR                                                 # out
     | LBRACE com RBRACE ND LBRACE com RBRACE                            # nd
+    | exp                                                               # expCmd
     ;
 
 exp : NAT                                 # nat
@@ -71,9 +73,11 @@ LPAR      : '(' ;
 RPAR      : ')';
 LBRACE    : '{' ;
 RBRACE    : '}' ;
+DOLLAR    : '$' ;
 SEMICOLON : ';' ;
 COMMA     : ',' ;
 DOTG      : '.g';
+
 
 ID : [a-z]+ ;
 

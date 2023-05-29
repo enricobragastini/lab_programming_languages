@@ -1,4 +1,4 @@
-// Generated from /home/stini/univr/3anno/linguaggi/lab/imp/src/Imp.g4 by ANTLR 4.12.0
+// Generated from /home/stini/univr/3anno/linguaggi/lab/lab_programming_languages/imp/src/Imp.g4 by ANTLR 4.12.0
 package parser;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
