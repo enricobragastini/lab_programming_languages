@@ -42,6 +42,13 @@ public interface ImpVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitGlobalDeclare(ImpParser.GlobalDeclareContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code arnoldBlock}
+	 * labeled alternative in {@link ImpParser#com}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldBlock(ImpParser.ArnoldBlockContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code globalAssign}
 	 * labeled alternative in {@link ImpParser#com}.
 	 * @param ctx the parse tree
@@ -195,4 +202,65 @@ public interface ImpVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId(ImpParser.IdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ImpParser#arnoldCProg}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCProg(ImpParser.ArnoldCProgContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCprint}
+	 * labeled alternative in {@link ImpParser#arnoldCCom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCprint(ImpParser.ArnoldCprintContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCdeclare}
+	 * labeled alternative in {@link ImpParser#arnoldCCom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCdeclare(ImpParser.ArnoldCdeclareContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCassign}
+	 * labeled alternative in {@link ImpParser#arnoldCCom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCassign(ImpParser.ArnoldCassignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCifelse}
+	 * labeled alternative in {@link ImpParser#arnoldCCom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCifelse(ImpParser.ArnoldCifelseContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCwhile}
+	 * labeled alternative in {@link ImpParser#arnoldCCom}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCwhile(ImpParser.ArnoldCwhileContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCArithmeticOp}
+	 * labeled alternative in {@link ImpParser#arnoldCOps}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCArithmeticOp(ImpParser.ArnoldCArithmeticOpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCLogicalOp}
+	 * labeled alternative in {@link ImpParser#arnoldCOps}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCLogicalOp(ImpParser.ArnoldCLogicalOpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ImpParser#arnoldCexp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCexp(ImpParser.ArnoldCexpContext ctx);
 }
