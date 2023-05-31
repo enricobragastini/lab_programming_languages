@@ -17,7 +17,7 @@ com : IF LPAR exp RPAR THEN LBRACE com RBRACE ELSE LBRACE com RBRACE    # if
     | WHILE LPAR exp RPAR LBRACE com RBRACE                             # while
     | OUT LPAR exp RPAR                                                 # out
     | LBRACE com RBRACE ND LBRACE com RBRACE                            # nd
-    | DOLLAR LBRACE arnoldCProg RBRACE DOLLAR                               # arnoldBlock
+    | DOLLAR LBRACE arnoldCProg RBRACE DOLLAR                           # arnoldBlock
     | exp                                                               # expCmd
     ;
 
@@ -50,35 +50,15 @@ arnoldCOps: op=(ARNPLUS|ARNMIN|ARNMULT|ARNDIV) arnoldCexp               #arnoldC
           | op=(ARNEQ|ARNGT|ARNOR|ARNAND) arnoldCexp                    #arnoldCLogicalOp
           ;
 
-arnoldCexp: StringLiteral | ARBOOL | FLOAT | ID;
-
-ARNPRINT:   'TALK TO THE HAND';
-ARNDECLR1:  'HEY CHRISTMAS TREE';
-ARNDECLR2:  'YOU SET US UP';
-ARNASSIGN1: 'GET TO THE CHOPPER';
-ARNASSIGN2: 'HERE IS MY INVITATION';
-ARNASSIGN3: 'ENOUGH TALK';
-ARNPLUS:    'GET UP';
-ARNMIN:     'GET DOWN';
-ARNMULT:    'YOU\'RE FIRED';
-ARNDIV:     'HE HAD TO SPLIT';
-ARNEQ:      'YOU ARE NOT YOU YOU ARE ME';
-ARNGT:      'LET OFF SOME STEAM BENNET';
-ARNOR:      'CONSIDER THAT A DIVORCE';
-ARNAND:     'KNOCK KNOCK';
-ARNIF1:     'BECAUSE I\'M GOING TO SAY PLEASE';
-ARNIF2:     'BULLSHIT';
-ARNIF3:     'YOU HAVE NO RESPECT FOR LOGIC';
-ARNWHILE1:  'STICK AROUND';
-ARNWHILE2:  'CHILL';
-ARBOOL:     '@I LIED' | '@NO PROBLEMO';
-
-StringLiteral : UnterminatedStringLiteral '"' ;
-fragment UnterminatedStringLiteral : '"' (~["\\\r\n] | '\\' (. | EOF))* ;
+arnoldCexp: StringLiteral   #arnoldCstring
+        | ARBOOL            #arnoldCbool
+        | FLOAT             #arnoldCfloat
+        | ID                #arnoldCid
+        ;
 
 
-FLOAT : [+-]? ([0-9]*[.])?[0-9]+;
 NAT : '0' | [1-9][0-9]* ;
+FLOAT : [+-]? ([0-9]*[.])?[0-9]+;
 BOOL : 'true' | 'false' ;
 
 PLUS  : '+' ;
@@ -121,6 +101,30 @@ COMMA     : ',' ;
 DOTG      : '.g';
 
 ID : [a-z]+ ;
+
+ARNPRINT:   'TALK TO THE HAND';
+ARNDECLR1:  'HEY CHRISTMAS TREE';
+ARNDECLR2:  'YOU SET US UP';
+ARNASSIGN1: 'GET TO THE CHOPPER';
+ARNASSIGN2: 'HERE IS MY INVITATION';
+ARNASSIGN3: 'ENOUGH TALK';
+ARNPLUS:    'GET UP';
+ARNMIN:     'GET DOWN';
+ARNMULT:    'YOU\'RE FIRED';
+ARNDIV:     'HE HAD TO SPLIT';
+ARNEQ:      'YOU ARE NOT YOU YOU ARE ME';
+ARNGT:      'LET OFF SOME STEAM BENNET';
+ARNOR:      'CONSIDER THAT A DIVORCE';
+ARNAND:     'KNOCK KNOCK';
+ARNIF1:     'BECAUSE I\'M GOING TO SAY PLEASE';
+ARNIF2:     'BULLSHIT';
+ARNIF3:     'YOU HAVE NO RESPECT FOR LOGIC';
+ARNWHILE1:  'STICK AROUND';
+ARNWHILE2:  'CHILL';
+ARBOOL:     '@I LIED' | '@NO PROBLEMO';
+
+StringLiteral : UnterminatedStringLiteral '"' ;
+fragment UnterminatedStringLiteral : '"' (~["\\\r\n] | '\\' (. | EOF))* ;
 
 WS : [ \t\r\n]+ -> skip ;
 

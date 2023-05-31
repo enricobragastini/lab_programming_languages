@@ -258,9 +258,31 @@ public interface ImpVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArnoldCLogicalOp(ImpParser.ArnoldCLogicalOpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ImpParser#arnoldCexp}.
+	 * Visit a parse tree produced by the {@code arnoldCstring}
+	 * labeled alternative in {@link ImpParser#arnoldCexp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArnoldCexp(ImpParser.ArnoldCexpContext ctx);
+	T visitArnoldCstring(ImpParser.ArnoldCstringContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCbool}
+	 * labeled alternative in {@link ImpParser#arnoldCexp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCbool(ImpParser.ArnoldCboolContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCfloat}
+	 * labeled alternative in {@link ImpParser#arnoldCexp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCfloat(ImpParser.ArnoldCfloatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arnoldCid}
+	 * labeled alternative in {@link ImpParser#arnoldCexp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArnoldCid(ImpParser.ArnoldCidContext ctx);
 }

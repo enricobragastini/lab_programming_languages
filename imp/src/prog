@@ -1,7 +1,9 @@
-fun f(x) {
-    y = x + 10;
-    return y
+fun f() {
+${
+IT'S SHOWTIME
+TALK TO THE HAND "Anna Karenina"
+YOU HAVE BEEN TERMINATED
+}$;
+return 42
 }
-y = 5;
-global y = 5;
-{ out(f(y)) } nd { { out(y) } nd { out(y.g + 10) } }
+out(f())

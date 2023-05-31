@@ -10,6 +10,8 @@ public class IntImp extends ImpBaseVisitor<Value> {
     private final Conf globalVars;
     private final Set<FunValue> functions = new HashSet<>();         //functions
 
+    private ExpValue<?> arnold_operand = null;
+
     public IntImp(Conf conf) {
         vars = new LinkedList<>();
         vars.add(new Conf());
@@ -226,8 +228,10 @@ public class IntImp extends ImpBaseVisitor<Value> {
         List<String> parameters = new ArrayList<>();
 
         // Salvo i nomi degli argomenti
-        for(TerminalNode par : ctx.params().ID()) {
-            parameters.add(par.getText());
+        if(ctx.params() != null) {
+            for (TerminalNode par : ctx.params().ID()) {
+                parameters.add(par.getText());
+            }
         }
 
         // Aggiungo la funzione
@@ -329,5 +333,181 @@ public class IntImp extends ImpBaseVisitor<Value> {
             return visitCom(ctx.com(1));
     }
 
+    @Override
+    public ComValue visitArnoldBlock(ImpParser.ArnoldBlockContext ctx) {
+        vars.add(new Conf());
+        visit(ctx.arnoldCProg());
+        vars.removeLast();
+        return ComValue.INSTANCE;
+    }
 
+    @Override
+    public ComValue visitArnoldCProg(ImpParser.ArnoldCProgContext ctx) {
+        for(ImpParser.ArnoldCComContext c : ctx.arnoldCCom()){
+            visit(c);
+        }
+
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public ComValue visitArnoldCprint(ImpParser.ArnoldCprintContext ctx) {
+        System.out.println(visit(ctx.arnoldCexp()));
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public ExpValue<?> visitArnoldCid(ImpParser.ArnoldCidContext ctx) {
+        String id = ctx.ID().getText();
+
+        if (!vars.getLast().contains(id)) {
+            System.err.println("" +
+                    "Variable " + id + " used but never instantiated");
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+
+            System.exit(1);
+        }
+
+        return vars.getLast().get(id);
+    }
+
+    @Override
+    public StringValue visitArnoldCstring(ImpParser.ArnoldCstringContext ctx) {
+        String value = ctx.getText();
+        if (value.startsWith("\"") && value.endsWith("\"")) {
+            value = value.substring(1, value.length() - 1);
+        }
+        return new StringValue(value);
+    }
+
+    @Override
+    public BoolValue visitArnoldCbool(ImpParser.ArnoldCboolContext ctx) {
+        return switch(ctx.ARBOOL().getText()){
+            case "@I LIED" -> new BoolValue(false);
+            case "@NO PROBLEMO" -> new BoolValue(true);
+            default -> null;
+        };
+    }
+
+    @Override
+    public FloatValue visitArnoldCfloat(ImpParser.ArnoldCfloatContext ctx) {
+        return new FloatValue(Float.parseFloat(ctx.FLOAT().getText()));
+    }
+
+    private ExpValue<?> visitArnoldCexp(ImpParser.ArnoldCexpContext ctx) {
+        return (ExpValue<?>) visit(ctx);
+    }
+
+    @Override
+    public ComValue visitArnoldCdeclare(ImpParser.ArnoldCdeclareContext ctx) {
+        String id = ctx.ID().getText();
+        ExpValue<?> value = visitArnoldCexp(ctx.arnoldCexp());
+
+        vars.getLast().update(id, value);
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public ComValue visitArnoldCArithmeticOp(ImpParser.ArnoldCArithmeticOpContext ctx) {
+        try{
+            FloatValue v = (FloatValue) visitArnoldCexp(ctx.arnoldCexp());
+            float val1 = (float) arnold_operand.toJavaValue();
+            float val2 = v.toJavaValue();
+            switch (ctx.op.getType()){
+                case ImpParser.ARNPLUS -> arnold_operand = new FloatValue(val1 + val2);
+                case ImpParser.ARNMIN -> arnold_operand = new FloatValue(val1 - val2);
+                case ImpParser.ARNMULT -> arnold_operand = new FloatValue(val1 * val2);
+                case ImpParser.ARNDIV -> arnold_operand = new FloatValue(val1 / val2);
+                default -> {}     // Dead code
+            }
+        } catch(ClassCastException e){
+            System.err.println("Expression is not a float");
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+            System.exit(1);
+        }
+
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public ComValue visitArnoldCLogicalOp(ImpParser.ArnoldCLogicalOpContext ctx) {
+        try{
+            ExpValue<?> v = visitArnoldCexp(ctx.arnoldCexp());
+            switch(ctx.op.getType()){
+                case ImpParser.ARNGT: {
+                    float v1 = ((FloatValue) arnold_operand).toJavaValue();
+                    float v2 = ((FloatValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+                    arnold_operand = new BoolValue(v1 > v2);
+                    break;
+                }
+                case ImpParser.ARNEQ: {
+                    ExpValue<?> v1 = arnold_operand;
+                    ExpValue<?> v2 = visitArnoldCexp(ctx.arnoldCexp());
+                    arnold_operand = new BoolValue(v1.equals(v2));
+                    break;
+                }
+                case ImpParser.ARNAND: {
+                    boolean v1 = ((BoolValue) arnold_operand).toJavaValue();
+                    boolean v2 = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+                    arnold_operand = new BoolValue(v1 && v2);
+                    break;
+                }
+                case ImpParser.ARNOR: {
+                    boolean v1 = ((BoolValue) arnold_operand).toJavaValue();
+                    boolean v2 = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+                    arnold_operand = new BoolValue(v1 || v2);
+                    break;
+                }
+                default: break;
+            }
+        } catch(ClassCastException e){
+            System.err.println("Inconsistent operand types : " + e.getMessage());
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+            System.exit(1);
+        }
+
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public ComValue visitArnoldCassign(ImpParser.ArnoldCassignContext ctx) {
+        String id = ctx.ID().getText();
+        arnold_operand = visitArnoldCexp(ctx.arnoldCexp());
+
+        for(ImpParser.ArnoldCOpsContext op : ctx.arnoldCOps()){
+            visit(op);
+        }
+
+        vars.getLast().update(id, arnold_operand);
+
+        return ComValue.INSTANCE;
+    }
+
+    @Override
+    public Value visitArnoldCifelse(ImpParser.ArnoldCifelseContext ctx) {
+        try{
+            boolean cond = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+            return cond
+                    ? visit(ctx.arnoldCCom(0))
+                    : visit(ctx.arnoldCCom(1));
+        } catch(ClassCastException e){
+            System.err.println("Invalid boolean expression");
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+            System.exit(1);
+        }
+        return null;        // Dead code
+    }
+
+    @Override
+    public ComValue visitArnoldCwhile(ImpParser.ArnoldCwhileContext ctx) {
+        boolean cond = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+
+        if (!cond)
+            return ComValue.INSTANCE;
+
+        for(ImpParser.ArnoldCComContext com : ctx.arnoldCCom())
+            visit(com);
+
+        return visitArnoldCwhile(ctx);
+    }
 }

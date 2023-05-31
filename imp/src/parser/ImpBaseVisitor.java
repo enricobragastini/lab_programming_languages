@@ -270,5 +270,26 @@ public class ImpBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements Im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArnoldCexp(ImpParser.ArnoldCexpContext ctx) { return visitChildren(ctx); }
+	@Override public T visitArnoldCstring(ImpParser.ArnoldCstringContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArnoldCbool(ImpParser.ArnoldCboolContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArnoldCfloat(ImpParser.ArnoldCfloatContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitArnoldCid(ImpParser.ArnoldCidContext ctx) { return visitChildren(ctx); }
 }

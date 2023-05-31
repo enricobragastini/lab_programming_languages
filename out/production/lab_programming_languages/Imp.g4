@@ -17,6 +17,7 @@ com : IF LPAR exp RPAR THEN LBRACE com RBRACE ELSE LBRACE com RBRACE    # if
     | WHILE LPAR exp RPAR LBRACE com RBRACE                             # while
     | OUT LPAR exp RPAR                                                 # out
     | LBRACE com RBRACE ND LBRACE com RBRACE                            # nd
+    | DOLLAR LBRACE arnoldCProg RBRACE DOLLAR                           # arnoldBlock
     | exp                                                               # expCmd
     ;
 
@@ -36,7 +37,28 @@ exp : NAT                                 # nat
     ;
 
 
+arnoldCProg : 'IT\'S SHOWTIME' arnoldCCom* 'YOU HAVE BEEN TERMINATED';
+
+arnoldCCom: ARNPRINT arnoldCexp                                         #arnoldCprint
+        | ARNDECLR1 ID ARNDECLR2  arnoldCexp                            #arnoldCdeclare
+        | ARNASSIGN1 ID ARNASSIGN2 arnoldCexp arnoldCOps+ ARNASSIGN3    #arnoldCassign
+        | ARNIF1 arnoldCexp arnoldCCom (ARNIF2 arnoldCCom)? ARNIF3      #arnoldCifelse
+        | ARNWHILE1 arnoldCexp arnoldCCom* ARNWHILE2                    #arnoldCwhile
+        ;
+
+arnoldCOps: op=(ARNPLUS|ARNMIN|ARNMULT|ARNDIV) arnoldCexp               #arnoldCArithmeticOp
+          | op=(ARNEQ|ARNGT|ARNOR|ARNAND) arnoldCexp                    #arnoldCLogicalOp
+          ;
+
+arnoldCexp: StringLiteral   #arnoldCstring
+        | ARBOOL            #arnoldCbool
+        | FLOAT             #arnoldCfloat
+        | ID                #arnoldCid
+        ;
+
+
 NAT : '0' | [1-9][0-9]* ;
+FLOAT : [+-]? ([0-9]*[.])?[0-9]+;
 BOOL : 'true' | 'false' ;
 
 PLUS  : '+' ;
@@ -78,7 +100,34 @@ SEMICOLON : ';' ;
 COMMA     : ',' ;
 DOTG      : '.g';
 
-
 ID : [a-z]+ ;
 
+ARNPRINT:   'TALK TO THE HAND';
+ARNDECLR1:  'HEY CHRISTMAS TREE';
+ARNDECLR2:  'YOU SET US UP';
+ARNASSIGN1: 'GET TO THE CHOPPER';
+ARNASSIGN2: 'HERE IS MY INVITATION';
+ARNASSIGN3: 'ENOUGH TALK';
+ARNPLUS:    'GET UP';
+ARNMIN:     'GET DOWN';
+ARNMULT:    'YOU\'RE FIRED';
+ARNDIV:     'HE HAD TO SPLIT';
+ARNEQ:      'YOU ARE NOT YOU YOU ARE ME';
+ARNGT:      'LET OFF SOME STEAM BENNET';
+ARNOR:      'CONSIDER THAT A DIVORCE';
+ARNAND:     'KNOCK KNOCK';
+ARNIF1:     'BECAUSE I\'M GOING TO SAY PLEASE';
+ARNIF2:     'BULLSHIT';
+ARNIF3:     'YOU HAVE NO RESPECT FOR LOGIC';
+ARNWHILE1:  'STICK AROUND';
+ARNWHILE2:  'CHILL';
+ARBOOL:     '@I LIED' | '@NO PROBLEMO';
+
+StringLiteral : UnterminatedStringLiteral '"' ;
+fragment UnterminatedStringLiteral : '"' (~["\\\r\n] | '\\' (. | EOF))* ;
+
 WS : [ \t\r\n]+ -> skip ;
+
+
+
+
