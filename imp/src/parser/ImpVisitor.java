@@ -35,8 +35,7 @@ public interface ImpVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncBody(ImpParser.FuncBodyContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code globalDeclare}
-	 * labeled alternative in {@link ImpParser#com}.
+	 * Visit a parse tree produced by {@link ImpParser#globalDeclare}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -55,13 +54,6 @@ public interface ImpVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitGlobalAssign(ImpParser.GlobalAssignContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code expCmd}
-	 * labeled alternative in {@link ImpParser#com}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpCmd(ImpParser.ExpCmdContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nd}
 	 * labeled alternative in {@link ImpParser#com}.

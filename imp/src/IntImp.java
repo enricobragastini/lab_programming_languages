@@ -1,3 +1,4 @@
+import org.antlr.v4.runtime.LexerInterpreter;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import value.*;
 import parser.*;
@@ -21,12 +22,6 @@ public class IntImp extends ImpBaseVisitor<Value> {
 
     private ComValue visitCom(ImpParser.ComContext ctx) {
         return (ComValue) visit(ctx);
-    }
-
-    @Override
-    public ComValue visitExpCmd(ImpParser.ExpCmdContext ctx) {
-        visitExp(ctx.exp());
-        return ComValue.INSTANCE;
     }
 
     private ExpValue<?> visitExp(ImpParser.ExpContext ctx) {
@@ -225,13 +220,33 @@ public class IntImp extends ImpBaseVisitor<Value> {
     @Override
     public Value visitFuncDef(ImpParser.FuncDefContext ctx) {
         String functionName = ctx.ID().getText();
+
+        for(FunValue fun : functions) {
+            if (fun.getName().equals(functionName)) {
+                System.err.println("Function " + functionName + " already defined");
+                System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+                System.exit(1);
+            }
+        }
+
         List<String> parameters = new ArrayList<>();
 
         // Salvo i nomi degli argomenti
         if(ctx.params() != null) {
             for (TerminalNode par : ctx.params().ID()) {
+                if(parameters.contains(par.getText())) {
+                    System.err.println("Parameter " + par.getText() + " already defined");
+                    System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+                    System.exit(1);
+                }
                 parameters.add(par.getText());
             }
+        }
+
+        if(ctx.funcBody().exp().getText().isEmpty()){
+            System.err.println("Function " + functionName + " has no return value");
+            System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
+            System.exit(1);
         }
 
         // Aggiungo la funzione
@@ -255,7 +270,7 @@ public class IntImp extends ImpBaseVisitor<Value> {
         for(FunValue fun : functions){
             if(fun.getName().equals(functionName)){
                 if(fun.totParams() != params.size()) {
-                    System.err.println("Wrong number of arguments");
+                    System.err.println("Function " + functionName + " called with the wrong number of arguments");
                     System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
                     System.exit(1);
                 }
@@ -279,7 +294,7 @@ public class IntImp extends ImpBaseVisitor<Value> {
             }
         }
 
-        System.err.println("Function " + functionName + " not found");
+        System.err.println("Function " + functionName + " used but never declared");
         System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
         System.exit(1);
 

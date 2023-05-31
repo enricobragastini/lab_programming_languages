@@ -1,6 +1,6 @@
 grammar Imp;
 
-prog : funcDef* com EOF ;
+prog : funcDef* globalDeclare* com EOF ;
 
 funcDef : FUN ID LPAR params? RPAR funcBody;
 
@@ -8,9 +8,10 @@ params : ID (COMMA ID)*;
 
 funcBody : LBRACE (com SEMICOLON)? RETURN exp RBRACE;
 
+globalDeclare: GLOBAL ID ASSIGN exp SEMICOLON;
+
 com : IF LPAR exp RPAR THEN LBRACE com RBRACE ELSE LBRACE com RBRACE    # if
     | ID ASSIGN exp                                                     # assign
-    | GLOBAL ID ASSIGN exp                                              # globalDeclare
     | ID DOTG ASSIGN exp                                                # globalAssign
     | SKIPP                                                             # skip
     | com SEMICOLON com                                                 # seq
@@ -18,7 +19,6 @@ com : IF LPAR exp RPAR THEN LBRACE com RBRACE ELSE LBRACE com RBRACE    # if
     | OUT LPAR exp RPAR                                                 # out
     | LBRACE com RBRACE ND LBRACE com RBRACE                            # nd
     | DOLLAR LBRACE arnoldCProg RBRACE DOLLAR                           # arnoldBlock
-    | exp                                                               # expCmd
     ;
 
 exp : NAT                                 # nat
@@ -87,7 +87,7 @@ SKIPP  : 'skip' ;
 ASSIGN : '=' ;
 OUT    : 'out' ;
 FUN    : 'fun' ;
-RETURN : 'return' ;
+RETURN : 'return ' ;
 GLOBAL : 'global' ;
 ND     : 'nd' ;
 
@@ -100,7 +100,7 @@ SEMICOLON : ';' ;
 COMMA     : ',' ;
 DOTG      : '.g';
 
-ID : [a-z]+ ;
+ID : [a-zA-Z0-9]+ ;
 
 ARNPRINT:   'TALK TO THE HAND';
 ARNDECLR1:  'HEY CHRISTMAS TREE';

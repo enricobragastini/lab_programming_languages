@@ -1,9 +1,12 @@
-fun f() {
-${
-IT'S SHOWTIME
-TALK TO THE HAND "Anna Karenina"
-YOU HAVE BEEN TERMINATED
-}$;
-return 42
+fun f(x) {
+    out(x);
+    x = 10;
+    out(x);
+    return x
 }
-out(f())
+
+x = 1;
+out(x);
+out(f(x));
+x = f(x);
+out(x)

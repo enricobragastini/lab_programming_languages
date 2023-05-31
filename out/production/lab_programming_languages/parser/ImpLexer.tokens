@@ -85,7 +85,7 @@ WS=62
 '='=26
 'out'=27
 'fun'=28
-'return'=29
+'return '=29
 'global'=30
 'nd'=31
 '('=32
