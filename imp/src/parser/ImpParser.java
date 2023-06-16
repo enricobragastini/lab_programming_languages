@@ -21,11 +21,11 @@ public class ImpParser extends Parser {
 		MOD=10, POW=11, AND=12, OR=13, EQQ=14, NEQ=15, LEQ=16, GEQ=17, LT=18, 
 		GT=19, NOT=20, IF=21, THEN=22, ELSE=23, WHILE=24, SKIPP=25, ASSIGN=26, 
 		OUT=27, FUN=28, RETURN=29, GLOBAL=30, ND=31, LPAR=32, RPAR=33, LBRACE=34, 
-		RBRACE=35, DOLLAR=36, SEMICOLON=37, COMMA=38, DOTG=39, ID=40, ARNPRINT=41, 
-		ARNDECLR1=42, ARNDECLR2=43, ARNASSIGN1=44, ARNASSIGN2=45, ARNASSIGN3=46, 
-		ARNPLUS=47, ARNMIN=48, ARNMULT=49, ARNDIV=50, ARNEQ=51, ARNGT=52, ARNOR=53, 
-		ARNAND=54, ARNIF1=55, ARNIF2=56, ARNIF3=57, ARNWHILE1=58, ARNWHILE2=59, 
-		ARBOOL=60, StringLiteral=61, WS=62;
+		RBRACE=35, DOLLAR=36, SEMICOLON=37, COMMA=38, DOTG=39, ARNPRINT=40, ARNDECLR1=41, 
+		ARNDECLR2=42, ARNASSIGN1=43, ARNASSIGN2=44, ARNASSIGN3=45, ARNPLUS=46, 
+		ARNMIN=47, ARNMULT=48, ARNDIV=49, ARNEQ=50, ARNGT=51, ARNOR=52, ARNAND=53, 
+		ARNIF1=54, ARNIF2=55, ARNIF3=56, ARNWHILE1=57, ARNWHILE2=58, ARBOOL=59, 
+		ID=60, StringLiteral=61, WS=62;
 	public static final int
 		RULE_prog = 0, RULE_funcDef = 1, RULE_params = 2, RULE_funcBody = 3, RULE_globalDeclare = 4, 
 		RULE_com = 5, RULE_exp = 6, RULE_arnoldCProg = 7, RULE_arnoldCCom = 8, 
@@ -44,7 +44,7 @@ public class ImpParser extends Parser {
 			"'+'", "'-'", "'*'", "'/'", "'mod'", "'^'", "'&'", "'|'", "'=='", "'!='", 
 			"'<='", "'>='", "'<'", "'>'", "'!'", "'if'", "'then'", "'else'", "'while'", 
 			"'skip'", "'='", "'out'", "'fun'", "'return '", "'global'", "'nd'", "'('", 
-			"')'", "'{'", "'}'", "'$'", "';'", "','", "'.g'", null, "'TALK TO THE HAND'", 
+			"')'", "'{'", "'}'", "'$'", "';'", "','", "'.g'", "'TALK TO THE HAND'", 
 			"'HEY CHRISTMAS TREE'", "'YOU SET US UP'", "'GET TO THE CHOPPER'", "'HERE IS MY INVITATION'", 
 			"'ENOUGH TALK'", "'GET UP'", "'GET DOWN'", "'YOU'RE FIRED'", "'HE HAD TO SPLIT'", 
 			"'YOU ARE NOT YOU YOU ARE ME'", "'LET OFF SOME STEAM BENNET'", "'CONSIDER THAT A DIVORCE'", 
@@ -59,10 +59,10 @@ public class ImpParser extends Parser {
 			"MOD", "POW", "AND", "OR", "EQQ", "NEQ", "LEQ", "GEQ", "LT", "GT", "NOT", 
 			"IF", "THEN", "ELSE", "WHILE", "SKIPP", "ASSIGN", "OUT", "FUN", "RETURN", 
 			"GLOBAL", "ND", "LPAR", "RPAR", "LBRACE", "RBRACE", "DOLLAR", "SEMICOLON", 
-			"COMMA", "DOTG", "ID", "ARNPRINT", "ARNDECLR1", "ARNDECLR2", "ARNASSIGN1", 
+			"COMMA", "DOTG", "ARNPRINT", "ARNDECLR1", "ARNDECLR2", "ARNASSIGN1", 
 			"ARNASSIGN2", "ARNASSIGN3", "ARNPLUS", "ARNMIN", "ARNMULT", "ARNDIV", 
 			"ARNEQ", "ARNGT", "ARNOR", "ARNAND", "ARNIF1", "ARNIF2", "ARNIF3", "ARNWHILE1", 
-			"ARNWHILE2", "ARBOOL", "StringLiteral", "WS"
+			"ARNWHILE2", "ARBOOL", "ID", "StringLiteral", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -354,7 +354,7 @@ public class ImpParser extends Parser {
 			setState(58);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1185597620224L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1152921590692839424L) != 0)) {
 				{
 				setState(55);
 				com(0);
@@ -1093,7 +1093,7 @@ public class ImpParser extends Parser {
 				setState(148);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1103807643688L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 1152921508902862888L) != 0)) {
 					{
 					setState(140);
 					exp(0);
@@ -1321,7 +1321,7 @@ public class ImpParser extends Parser {
 			setState(183);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 324283362426486784L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 162141681213243392L) != 0)) {
 				{
 				{
 				setState(180);
@@ -1508,7 +1508,7 @@ public class ImpParser extends Parser {
 					setState(201); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 35888059530608640L) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 17944029765304320L) != 0) );
 				setState(203);
 				match(ARNASSIGN3);
 				}
@@ -1550,7 +1550,7 @@ public class ImpParser extends Parser {
 				setState(219);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 324283362426486784L) != 0)) {
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 162141681213243392L) != 0)) {
 					{
 					{
 					setState(216);
@@ -1645,7 +1645,7 @@ public class ImpParser extends Parser {
 				setState(226);
 				((ArnoldCArithmeticOpContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 2111062325329920L) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1055531162664960L) != 0)) ) {
 					((ArnoldCArithmeticOpContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -1667,7 +1667,7 @@ public class ImpParser extends Parser {
 				setState(228);
 				((ArnoldCLogicalOpContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 33776997205278720L) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 16888498602639360L) != 0)) ) {
 					((ArnoldCLogicalOpContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 				}
 				else {
@@ -1875,7 +1875,7 @@ public class ImpParser extends Parser {
 		"\n\u0001\n\u0001\n\u0003\n\u00ed\b\n\u0001\n\u0000\u0002\n\f\u000b\u0000"+
 		"\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0000\u0007\u0001\u0000"+
 		"\b\n\u0001\u0000\u0006\u0007\u0001\u0000\u0010\u0013\u0001\u0000\u000e"+
-		"\u000f\u0001\u0000\f\r\u0001\u0000/2\u0001\u000036\u010a\u0000\u0019\u0001"+
+		"\u000f\u0001\u0000\f\r\u0001\u0000.1\u0001\u000025\u010a\u0000\u0019\u0001"+
 		"\u0000\u0000\u0000\u0002%\u0001\u0000\u0000\u0000\u0004.\u0001\u0000\u0000"+
 		"\u0000\u00066\u0001\u0000\u0000\u0000\b@\u0001\u0000\u0000\u0000\nw\u0001"+
 		"\u0000\u0000\u0000\f\u009a\u0001\u0000\u0000\u0000\u000e\u00b3\u0001\u0000"+
@@ -1888,25 +1888,25 @@ public class ImpParser extends Parser {
 		"\u0000\u001e!\u0001\u0000\u0000\u0000\u001f\u001d\u0001\u0000\u0000\u0000"+
 		"\u001f \u0001\u0000\u0000\u0000 \"\u0001\u0000\u0000\u0000!\u001f\u0001"+
 		"\u0000\u0000\u0000\"#\u0003\n\u0005\u0000#$\u0005\u0000\u0000\u0001$\u0001"+
-		"\u0001\u0000\u0000\u0000%&\u0005\u001c\u0000\u0000&\'\u0005(\u0000\u0000"+
+		"\u0001\u0000\u0000\u0000%&\u0005\u001c\u0000\u0000&\'\u0005<\u0000\u0000"+
 		"\')\u0005 \u0000\u0000(*\u0003\u0004\u0002\u0000)(\u0001\u0000\u0000\u0000"+
 		")*\u0001\u0000\u0000\u0000*+\u0001\u0000\u0000\u0000+,\u0005!\u0000\u0000"+
-		",-\u0003\u0006\u0003\u0000-\u0003\u0001\u0000\u0000\u0000.3\u0005(\u0000"+
-		"\u0000/0\u0005&\u0000\u000002\u0005(\u0000\u00001/\u0001\u0000\u0000\u0000"+
+		",-\u0003\u0006\u0003\u0000-\u0003\u0001\u0000\u0000\u0000.3\u0005<\u0000"+
+		"\u0000/0\u0005&\u0000\u000002\u0005<\u0000\u00001/\u0001\u0000\u0000\u0000"+
 		"25\u0001\u0000\u0000\u000031\u0001\u0000\u0000\u000034\u0001\u0000\u0000"+
 		"\u00004\u0005\u0001\u0000\u0000\u000053\u0001\u0000\u0000\u00006:\u0005"+
 		"\"\u0000\u000078\u0003\n\u0005\u000089\u0005%\u0000\u00009;\u0001\u0000"+
 		"\u0000\u0000:7\u0001\u0000\u0000\u0000:;\u0001\u0000\u0000\u0000;<\u0001"+
 		"\u0000\u0000\u0000<=\u0005\u001d\u0000\u0000=>\u0003\f\u0006\u0000>?\u0005"+
 		"#\u0000\u0000?\u0007\u0001\u0000\u0000\u0000@A\u0005\u001e\u0000\u0000"+
-		"AB\u0005(\u0000\u0000BC\u0005\u001a\u0000\u0000CD\u0003\f\u0006\u0000"+
+		"AB\u0005<\u0000\u0000BC\u0005\u001a\u0000\u0000CD\u0003\f\u0006\u0000"+
 		"DE\u0005%\u0000\u0000E\t\u0001\u0000\u0000\u0000FG\u0006\u0005\uffff\uffff"+
 		"\u0000GH\u0005\u0015\u0000\u0000HI\u0005 \u0000\u0000IJ\u0003\f\u0006"+
 		"\u0000JK\u0005!\u0000\u0000KL\u0005\u0016\u0000\u0000LM\u0005\"\u0000"+
 		"\u0000MN\u0003\n\u0005\u0000NO\u0005#\u0000\u0000OP\u0005\u0017\u0000"+
 		"\u0000PQ\u0005\"\u0000\u0000QR\u0003\n\u0005\u0000RS\u0005#\u0000\u0000"+
-		"Sx\u0001\u0000\u0000\u0000TU\u0005(\u0000\u0000UV\u0005\u001a\u0000\u0000"+
-		"Vx\u0003\f\u0006\u0000WX\u0005(\u0000\u0000XY\u0005\'\u0000\u0000YZ\u0005"+
+		"Sx\u0001\u0000\u0000\u0000TU\u0005<\u0000\u0000UV\u0005\u001a\u0000\u0000"+
+		"Vx\u0003\f\u0006\u0000WX\u0005<\u0000\u0000XY\u0005\'\u0000\u0000YZ\u0005"+
 		"\u001a\u0000\u0000Zx\u0003\f\u0006\u0000[x\u0005\u0019\u0000\u0000\\]"+
 		"\u0005\u0018\u0000\u0000]^\u0005 \u0000\u0000^_\u0003\f\u0006\u0000_`"+
 		"\u0005!\u0000\u0000`a\u0005\"\u0000\u0000ab\u0003\n\u0005\u0000bc\u0005"+
@@ -1927,7 +1927,7 @@ public class ImpParser extends Parser {
 		"\u009b\u0005\u0003\u0000\u0000\u0083\u009b\u0005\u0005\u0000\u0000\u0084"+
 		"\u0085\u0005 \u0000\u0000\u0085\u0086\u0003\f\u0006\u0000\u0086\u0087"+
 		"\u0005!\u0000\u0000\u0087\u009b\u0001\u0000\u0000\u0000\u0088\u0089\u0005"+
-		"\u0014\u0000\u0000\u0089\u009b\u0003\f\u0006\t\u008a\u008b\u0005(\u0000"+
+		"\u0014\u0000\u0000\u0089\u009b\u0003\f\u0006\t\u008a\u008b\u0005<\u0000"+
 		"\u0000\u008b\u0094\u0005 \u0000\u0000\u008c\u0091\u0003\f\u0006\u0000"+
 		"\u008d\u008e\u0005&\u0000\u0000\u008e\u0090\u0003\f\u0006\u0000\u008f"+
 		"\u008d\u0001\u0000\u0000\u0000\u0090\u0093\u0001\u0000\u0000\u0000\u0091"+
@@ -1935,8 +1935,8 @@ public class ImpParser extends Parser {
 		"\u0095\u0001\u0000\u0000\u0000\u0093\u0091\u0001\u0000\u0000\u0000\u0094"+
 		"\u008c\u0001\u0000\u0000\u0000\u0094\u0095\u0001\u0000\u0000\u0000\u0095"+
 		"\u0096\u0001\u0000\u0000\u0000\u0096\u009b\u0005!\u0000\u0000\u0097\u0098"+
-		"\u0005(\u0000\u0000\u0098\u009b\u0005\'\u0000\u0000\u0099\u009b\u0005"+
-		"(\u0000\u0000\u009a\u0081\u0001\u0000\u0000\u0000\u009a\u0083\u0001\u0000"+
+		"\u0005<\u0000\u0000\u0098\u009b\u0005\'\u0000\u0000\u0099\u009b\u0005"+
+		"<\u0000\u0000\u009a\u0081\u0001\u0000\u0000\u0000\u009a\u0083\u0001\u0000"+
 		"\u0000\u0000\u009a\u0084\u0001\u0000\u0000\u0000\u009a\u0088\u0001\u0000"+
 		"\u0000\u0000\u009a\u008a\u0001\u0000\u0000\u0000\u009a\u0097\u0001\u0000"+
 		"\u0000\u0000\u009a\u0099\u0001\u0000\u0000\u0000\u009b\u00b0\u0001\u0000"+
@@ -1958,33 +1958,33 @@ public class ImpParser extends Parser {
 		"\u00b6\u00b9\u0001\u0000\u0000\u0000\u00b7\u00b5\u0001\u0000\u0000\u0000"+
 		"\u00b7\u00b8\u0001\u0000\u0000\u0000\u00b8\u00ba\u0001\u0000\u0000\u0000"+
 		"\u00b9\u00b7\u0001\u0000\u0000\u0000\u00ba\u00bb\u0005\u0002\u0000\u0000"+
-		"\u00bb\u000f\u0001\u0000\u0000\u0000\u00bc\u00bd\u0005)\u0000\u0000\u00bd"+
-		"\u00e1\u0003\u0014\n\u0000\u00be\u00bf\u0005*\u0000\u0000\u00bf\u00c0"+
-		"\u0005(\u0000\u0000\u00c0\u00c1\u0005+\u0000\u0000\u00c1\u00e1\u0003\u0014"+
-		"\n\u0000\u00c2\u00c3\u0005,\u0000\u0000\u00c3\u00c4\u0005(\u0000\u0000"+
-		"\u00c4\u00c5\u0005-\u0000\u0000\u00c5\u00c7\u0003\u0014\n\u0000\u00c6"+
+		"\u00bb\u000f\u0001\u0000\u0000\u0000\u00bc\u00bd\u0005(\u0000\u0000\u00bd"+
+		"\u00e1\u0003\u0014\n\u0000\u00be\u00bf\u0005)\u0000\u0000\u00bf\u00c0"+
+		"\u0005<\u0000\u0000\u00c0\u00c1\u0005*\u0000\u0000\u00c1\u00e1\u0003\u0014"+
+		"\n\u0000\u00c2\u00c3\u0005+\u0000\u0000\u00c3\u00c4\u0005<\u0000\u0000"+
+		"\u00c4\u00c5\u0005,\u0000\u0000\u00c5\u00c7\u0003\u0014\n\u0000\u00c6"+
 		"\u00c8\u0003\u0012\t\u0000\u00c7\u00c6\u0001\u0000\u0000\u0000\u00c8\u00c9"+
 		"\u0001\u0000\u0000\u0000\u00c9\u00c7\u0001\u0000\u0000\u0000\u00c9\u00ca"+
 		"\u0001\u0000\u0000\u0000\u00ca\u00cb\u0001\u0000\u0000\u0000\u00cb\u00cc"+
-		"\u0005.\u0000\u0000\u00cc\u00e1\u0001\u0000\u0000\u0000\u00cd\u00ce\u0005"+
-		"7\u0000\u0000\u00ce\u00cf\u0003\u0014\n\u0000\u00cf\u00d2\u0003\u0010"+
-		"\b\u0000\u00d0\u00d1\u00058\u0000\u0000\u00d1\u00d3\u0003\u0010\b\u0000"+
+		"\u0005-\u0000\u0000\u00cc\u00e1\u0001\u0000\u0000\u0000\u00cd\u00ce\u0005"+
+		"6\u0000\u0000\u00ce\u00cf\u0003\u0014\n\u0000\u00cf\u00d2\u0003\u0010"+
+		"\b\u0000\u00d0\u00d1\u00057\u0000\u0000\u00d1\u00d3\u0003\u0010\b\u0000"+
 		"\u00d2\u00d0\u0001\u0000\u0000\u0000\u00d2\u00d3\u0001\u0000\u0000\u0000"+
-		"\u00d3\u00d4\u0001\u0000\u0000\u0000\u00d4\u00d5\u00059\u0000\u0000\u00d5"+
-		"\u00e1\u0001\u0000\u0000\u0000\u00d6\u00d7\u0005:\u0000\u0000\u00d7\u00db"+
+		"\u00d3\u00d4\u0001\u0000\u0000\u0000\u00d4\u00d5\u00058\u0000\u0000\u00d5"+
+		"\u00e1\u0001\u0000\u0000\u0000\u00d6\u00d7\u00059\u0000\u0000\u00d7\u00db"+
 		"\u0003\u0014\n\u0000\u00d8\u00da\u0003\u0010\b\u0000\u00d9\u00d8\u0001"+
 		"\u0000\u0000\u0000\u00da\u00dd\u0001\u0000\u0000\u0000\u00db\u00d9\u0001"+
 		"\u0000\u0000\u0000\u00db\u00dc\u0001\u0000\u0000\u0000\u00dc\u00de\u0001"+
 		"\u0000\u0000\u0000\u00dd\u00db\u0001\u0000\u0000\u0000\u00de\u00df\u0005"+
-		";\u0000\u0000\u00df\u00e1\u0001\u0000\u0000\u0000\u00e0\u00bc\u0001\u0000"+
+		":\u0000\u0000\u00df\u00e1\u0001\u0000\u0000\u0000\u00e0\u00bc\u0001\u0000"+
 		"\u0000\u0000\u00e0\u00be\u0001\u0000\u0000\u0000\u00e0\u00c2\u0001\u0000"+
 		"\u0000\u0000\u00e0\u00cd\u0001\u0000\u0000\u0000\u00e0\u00d6\u0001\u0000"+
 		"\u0000\u0000\u00e1\u0011\u0001\u0000\u0000\u0000\u00e2\u00e3\u0007\u0005"+
 		"\u0000\u0000\u00e3\u00e7\u0003\u0014\n\u0000\u00e4\u00e5\u0007\u0006\u0000"+
 		"\u0000\u00e5\u00e7\u0003\u0014\n\u0000\u00e6\u00e2\u0001\u0000\u0000\u0000"+
 		"\u00e6\u00e4\u0001\u0000\u0000\u0000\u00e7\u0013\u0001\u0000\u0000\u0000"+
-		"\u00e8\u00ed\u0005=\u0000\u0000\u00e9\u00ed\u0005<\u0000\u0000\u00ea\u00ed"+
-		"\u0005\u0004\u0000\u0000\u00eb\u00ed\u0005(\u0000\u0000\u00ec\u00e8\u0001"+
+		"\u00e8\u00ed\u0005=\u0000\u0000\u00e9\u00ed\u0005;\u0000\u0000\u00ea\u00ed"+
+		"\u0005\u0004\u0000\u0000\u00eb\u00ed\u0005<\u0000\u0000\u00ec\u00e8\u0001"+
 		"\u0000\u0000\u0000\u00ec\u00e9\u0001\u0000\u0000\u0000\u00ec\u00ea\u0001"+
 		"\u0000\u0000\u0000\u00ec\u00eb\u0001\u0000\u0000\u0000\u00ed\u0015\u0001"+
 		"\u0000\u0000\u0000\u0013\u0019\u001f)3:w~\u0091\u0094\u009a\u00ae\u00b0"+

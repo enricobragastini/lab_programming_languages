@@ -65,6 +65,9 @@ public class IntImp extends ImpBaseVisitor<Value> {
         for (ImpParser.FuncDefContext f: ctx.funcDef()) {
             visitFuncDef(f);
         }
+        for(ImpParser.GlobalDeclareContext g : ctx.globalDeclare()){
+            visitGlobalDeclare(g);
+        }
         return visitCom(ctx.com());
     }
 
@@ -221,6 +224,7 @@ public class IntImp extends ImpBaseVisitor<Value> {
     public Value visitFuncDef(ImpParser.FuncDefContext ctx) {
         String functionName = ctx.ID().getText();
 
+        // Controllo che la funzione non sia stata già definita
         for(FunValue fun : functions) {
             if (fun.getName().equals(functionName)) {
                 System.err.println("Function " + functionName + " already defined");
@@ -229,9 +233,8 @@ public class IntImp extends ImpBaseVisitor<Value> {
             }
         }
 
+        // Salvo i nomi degli parametri
         List<String> parameters = new ArrayList<>();
-
-        // Salvo i nomi degli argomenti
         if(ctx.params() != null) {
             for (TerminalNode par : ctx.params().ID()) {
                 if(parameters.contains(par.getText())) {
@@ -265,11 +268,11 @@ public class IntImp extends ImpBaseVisitor<Value> {
     @Override
     public ExpValue<?> visitFuncCall(ImpParser.FuncCallContext ctx) {
         String functionName = ctx.ID().getText();
-        List<ImpParser.ExpContext> params = ctx.exp();
+        List<ImpParser.ExpContext> args = ctx.exp();
 
         for(FunValue fun : functions){
             if(fun.getName().equals(functionName)){
-                if(fun.totParams() != params.size()) {
+                if(fun.totParams() != args.size()) {
                     System.err.println("Function " + functionName + " called with the wrong number of arguments");
                     System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
                     System.exit(1);
@@ -278,26 +281,26 @@ public class IntImp extends ImpBaseVisitor<Value> {
                 Conf funcConf = new Conf();                 // Function variables
                 int paramIndex = 0;
                 for (String id : fun.getParams()) {         // Visit all parameters
-                    funcConf.update(id, visitExp(params.get(paramIndex)));      // Add param value to function Conf
+                    funcConf.update(id, visitExp(args.get(paramIndex)));      // Add param value to function Conf
                     paramIndex++;
                 }
 
-                vars.add(funcConf);
+                vars.add(funcConf);         // Push function context
                 ImpParser.ComContext body = fun.getBody();
                 if(body != null)
-                    visitCom(fun.getBody());
+                    visitCom(fun.getBody());    // Function body execution
 
                 ExpValue<?> returnValue = visitExp(fun.getReturnExp());
-                vars.removeLast();
+                vars.removeLast();          // Pop function context
 
                 return returnValue;
             }
         }
 
+        // Function not found -> exit with error
         System.err.println("Function " + functionName + " used but never declared");
         System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
         System.exit(1);
-
         return null;
     }
 
@@ -341,7 +344,7 @@ public class IntImp extends ImpBaseVisitor<Value> {
     @Override
     public ComValue visitNd(ImpParser.NdContext ctx) {
         // Generate random boolean value
-        boolean b = Math.random() > 0.5;
+        boolean b = Math.random() >= 0.5;
         if(b)
             return visitCom(ctx.com(0));
         else
@@ -350,9 +353,9 @@ public class IntImp extends ImpBaseVisitor<Value> {
 
     @Override
     public ComValue visitArnoldBlock(ImpParser.ArnoldBlockContext ctx) {
-        vars.add(new Conf());
+        vars.add(new Conf());         // Push arnold block context
         visit(ctx.arnoldCProg());
-        vars.removeLast();
+        vars.removeLast();            // Pop arnold block context
         return ComValue.INSTANCE;
     }
 
@@ -376,8 +379,7 @@ public class IntImp extends ImpBaseVisitor<Value> {
         String id = ctx.ID().getText();
 
         if (!vars.getLast().contains(id)) {
-            System.err.println("" +
-                    "Variable " + id + " used but never instantiated");
+            System.err.println("Variable " + id + " used but never instantiated");
             System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
 
             System.exit(1);

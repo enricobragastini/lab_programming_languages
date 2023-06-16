@@ -43,7 +43,7 @@ arnoldCCom: ARNPRINT arnoldCexp                                         #arnoldC
         | ARNDECLR1 ID ARNDECLR2  arnoldCexp                            #arnoldCdeclare
         | ARNASSIGN1 ID ARNASSIGN2 arnoldCexp arnoldCOps+ ARNASSIGN3    #arnoldCassign
         | ARNIF1 arnoldCexp arnoldCCom (ARNIF2 arnoldCCom)? ARNIF3      #arnoldCifelse
-        | ARNWHILE1 arnoldCexp arnoldCCom* ARNWHILE2                    #arnoldCwhile
+        | ARNWHILE1 arnoldCexp arnoldCCom*  ARNWHILE2                   #arnoldCwhile
         ;
 
 arnoldCOps: op=(ARNPLUS|ARNMIN|ARNMULT|ARNDIV) arnoldCexp               #arnoldCArithmeticOp
@@ -100,7 +100,6 @@ SEMICOLON : ';' ;
 COMMA     : ',' ;
 DOTG      : '.g';
 
-ID : [a-zA-Z0-9]+ ;
 
 ARNPRINT:   'TALK TO THE HAND';
 ARNDECLR1:  'HEY CHRISTMAS TREE';
@@ -122,6 +121,8 @@ ARNIF3:     'YOU HAVE NO RESPECT FOR LOGIC';
 ARNWHILE1:  'STICK AROUND';
 ARNWHILE2:  'CHILL';
 ARBOOL:     '@I LIED' | '@NO PROBLEMO';
+
+ID : [a-zA-Z0-9]+ ;
 
 StringLiteral : UnterminatedStringLiteral '"' ;
 fragment UnterminatedStringLiteral : '"' (~["\\\r\n] | '\\' (. | EOF))* ;

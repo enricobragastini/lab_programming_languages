@@ -19,6 +19,10 @@ public class Main {
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         ImpParser parser = new ImpParser(tokenStream);
 
+        parser.removeErrorListeners();
+        parser.addErrorListener(new CustomErrorListener());
+
+
         ParseTree tree = parser.prog();
 
         IntImp interpreter = new IntImp(new Conf());
