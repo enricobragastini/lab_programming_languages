@@ -398,11 +398,11 @@ public class IntImp extends ImpBaseVisitor<Value> {
     }
 
     @Override
-    public BoolValue visitArnoldCbool(ImpParser.ArnoldCboolContext ctx) {
+    public FloatValue visitArnoldCbool(ImpParser.ArnoldCboolContext ctx) {
         return switch(ctx.ARBOOL().getText()){
-            case "@I LIED" -> new BoolValue(false);
-            case "@NO PROBLEMO" -> new BoolValue(true);
-            default -> null;
+            case "@I LIED" -> new FloatValue(0);
+            case "@NO PROBLEMO" -> new FloatValue(1);
+            default -> null;    // Dead code
         };
     }
 
@@ -450,32 +450,28 @@ public class IntImp extends ImpBaseVisitor<Value> {
     public ComValue visitArnoldCLogicalOp(ImpParser.ArnoldCLogicalOpContext ctx) {
         try{
             ExpValue<?> v = visitArnoldCexp(ctx.arnoldCexp());
-            switch(ctx.op.getType()){
-                case ImpParser.ARNGT: {
+            switch (ctx.op.getType()) {
+                case ImpParser.ARNGT -> {
                     float v1 = ((FloatValue) arnold_operand).toJavaValue();
                     float v2 = ((FloatValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
-                    arnold_operand = new BoolValue(v1 > v2);
-                    break;
+                    arnold_operand = (v1 > v2) ? new FloatValue(1) : new FloatValue(0);
                 }
-                case ImpParser.ARNEQ: {
+                case ImpParser.ARNEQ -> {
                     ExpValue<?> v1 = arnold_operand;
                     ExpValue<?> v2 = visitArnoldCexp(ctx.arnoldCexp());
-                    arnold_operand = new BoolValue(v1.equals(v2));
-                    break;
+                    arnold_operand = (v1.equals(v2)) ? new FloatValue(1) : new FloatValue(0);
                 }
-                case ImpParser.ARNAND: {
-                    boolean v1 = ((BoolValue) arnold_operand).toJavaValue();
-                    boolean v2 = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
-                    arnold_operand = new BoolValue(v1 && v2);
-                    break;
+                case ImpParser.ARNAND -> {
+                    float v1 = ((FloatValue) arnold_operand).toJavaValue();
+                    float v2 = ((FloatValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+                    arnold_operand = ((v1 * v2) > 0) ? new FloatValue(1) : new FloatValue(0);
                 }
-                case ImpParser.ARNOR: {
-                    boolean v1 = ((BoolValue) arnold_operand).toJavaValue();
-                    boolean v2 = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
-                    arnold_operand = new BoolValue(v1 || v2);
-                    break;
+                case ImpParser.ARNOR -> {
+                    float v1 = ((FloatValue) arnold_operand).toJavaValue();
+                    float v2 = ((FloatValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+                    arnold_operand = ((v1 + v2) > 0) ? new FloatValue(1) : new FloatValue(0);
                 }
-                default: break;
+                default -> { /* Dead code */}
             }
         } catch(ClassCastException e){
             System.err.println("Inconsistent operand types : " + e.getMessage());
@@ -503,12 +499,12 @@ public class IntImp extends ImpBaseVisitor<Value> {
     @Override
     public Value visitArnoldCifelse(ImpParser.ArnoldCifelseContext ctx) {
         try{
-            boolean cond = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
-            return cond
+            float cond = ((FloatValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+            return (cond != 0)
                     ? visit(ctx.arnoldCCom(0))
                     : visit(ctx.arnoldCCom(1));
         } catch(ClassCastException e){
-            System.err.println("Invalid boolean expression");
+            System.err.println("Invalid condition expression");
             System.err.println("@" + ctx.start.getLine() + ":" + ctx.start.getCharPositionInLine());
             System.exit(1);
         }
@@ -517,9 +513,9 @@ public class IntImp extends ImpBaseVisitor<Value> {
 
     @Override
     public ComValue visitArnoldCwhile(ImpParser.ArnoldCwhileContext ctx) {
-        boolean cond = ((BoolValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
+        float cond = ((FloatValue) visitArnoldCexp(ctx.arnoldCexp())).toJavaValue();
 
-        if (!cond)
+        if (cond == 0)
             return ComValue.INSTANCE;
 
         for(ImpParser.ArnoldCComContext com : ctx.arnoldCCom())
